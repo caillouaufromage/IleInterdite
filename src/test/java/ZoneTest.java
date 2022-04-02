@@ -1,6 +1,6 @@
-import org.junit.Before;
+import utils.Etat;
+import Models.Zone;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 public class ZoneTest {
 
