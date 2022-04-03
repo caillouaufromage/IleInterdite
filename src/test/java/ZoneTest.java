@@ -2,6 +2,9 @@ import utils.Etat;
 import Models.Zone;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
 public class ZoneTest {
 
     @Test

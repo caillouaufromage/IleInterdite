@@ -11,7 +11,7 @@ public class Zone extends Position {
     }
 
     public Zone(Position p , Etat etat){
-        this(p.x,p.y,etat);
+        this(p.getX(),p.getY(),etat);
     }
 
     public Etat getEtat() {

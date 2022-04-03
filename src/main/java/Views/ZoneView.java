@@ -9,21 +9,22 @@ import javax.swing.*;
 
 
 
-public class ZoneView extends JPanel implements Observer {
+public class ZoneView  implements Observer {
     int x,y;
-    int size;
+    int HAUTEUR = 40;
+    int LARGEUR = 20;
 
-    public ZoneView(){
-
+    public ZoneView(int x, int y){
+        this.x = x;
+        this.y = y;
     }
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
+    public void paint(Graphics g){
         g.setColor(Color.GRAY);
-        //g.fillRect(x, y,x+1);
+        g.fillRect(x, y,LARGEUR, HAUTEUR);
     }
 
     @Override
     public void update() {
-        repaint();
+
     }
 }
