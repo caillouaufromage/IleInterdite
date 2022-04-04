@@ -3,6 +3,7 @@ package Models;
 
 import utils.Etat;
 import utils.Observable;
+import utils.Position;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -13,9 +14,11 @@ public class Grille extends Observable {
     private List<Zone> zonesNormales;
     private List<Zone> zonesSubmergées;
     private List<Zone> zonesInondées;
+    private List<Joueur> positionJoueurs;
     public Grille(){
         grille = new Zone[6][6];
         Etat normal = Etat.Normale;
+        this.positionJoueurs = new ArrayList<>();
         /*grille = new Zone[][]{{new Zone(0,0,normal), new Zone(0,1,normal)},
                               {new Zone(1,0,normal),new Zone(1,1,normal),new Zone(1,2,normal),new Zone(1,3,normal)},
                               {new Zone(2,0,normal),new Zone(2,1,normal),new Zone(2,2,normal),new Zone(2,3,normal),new Zone(2,4,normal), new Zone(2,5,normal)},
@@ -33,6 +36,7 @@ public class Grille extends Observable {
                     grille[i][j] = new Zone(i,j,normal);
             }
         }
+        positionJoueurs.add(new Joueur(3,4));
 
     }
 
@@ -51,6 +55,9 @@ public class Grille extends Observable {
         return grille[x][y];
     }
 
+    public List<Joueur> getPositionJoueurs() {
+        return positionJoueurs;
+    }
 
     @Override
     public String toString() {

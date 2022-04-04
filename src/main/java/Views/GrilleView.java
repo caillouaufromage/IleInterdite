@@ -2,20 +2,24 @@ package Views;
 
 import Controllers.JeuController;
 import Models.Grille;
+import Models.Joueur;
 import Models.Zone;
 import utils.Etat;
 import utils.Observer;
+import utils.Position;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class GrilleView extends JPanel implements Observer {
     int HAUTEUR = 60;
     int LONGUEUR = 40;
     private Grille grille;
+    private List<Joueur> positionJoueurs;
     public GrilleView(Grille grille){
         this.grille = grille;
-
+        this.positionJoueurs = grille.getPositionJoueurs();
         //System.out.println("test");
         //setBackground(Color.BLUE);
         this.setPreferredSize(new Dimension((LONGUEUR + LONGUEUR /2 ) * 10,(HAUTEUR + HAUTEUR /2 ) * 10));
@@ -29,10 +33,12 @@ public class GrilleView extends JPanel implements Observer {
         for (int i = 0; i < 6;i++)
             for (int j = 0; j < 6; j++)
                 paint(g, grille.getZone(i,j) , i*(LONGUEUR+LONGUEUR/2), j*(HAUTEUR + LONGUEUR/2));
+        for (Joueur p : positionJoueurs)
+            paint(g,p,p.getX()*(LONGUEUR+LONGUEUR/2),p.getY()*(HAUTEUR + LONGUEUR/2));
     }
 
     private void paint(Graphics g, Zone zone , int x, int y) {
-        /** Sélection d'une couleur. */
+        /** Sélection d'une couleur. **/
         //System.out.println("test");
         if(zone.getEtat() == Etat.Normale)
             g.setColor(Color.GRAY);
@@ -40,9 +46,13 @@ public class GrilleView extends JPanel implements Observer {
             g.setColor(Color.BLUE);
         else if (zone.getEtat() == Etat.Inondée)
             g.setColor(Color.CYAN);
-        /** Coloration d'un rectangle. */
+        /** Coloration d'un rectangle. **/
         g.fillRect(x, y,LONGUEUR, HAUTEUR );
+    }
 
+    private void paint(Graphics g, Joueur joueur, int x, int y){
+        g.setColor(Color.RED);
+        g.fillOval(x,y,30,30);
     }
 
     @Override

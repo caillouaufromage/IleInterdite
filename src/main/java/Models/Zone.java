@@ -3,8 +3,9 @@ package Models;
 import utils.Etat;
 import utils.Position;
 
-public class Zone extends Position {
+public class Zone extends Element {
     Etat etat;
+
     public Zone(int x,int y, Etat etat) {
         super(x,y);
         this.etat = etat;

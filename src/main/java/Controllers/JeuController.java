@@ -24,14 +24,14 @@ public class JeuController extends Observable implements ActionListener {
     }
 
     void innondation(){
-        List<Zone> zonesSubmergées = grille.getListNonZonesSubmergées();
+        List<Zone> nonZonesSubmergées = grille.getListNonZonesSubmergées();
         for (int i = 0 ; i < 3; i++) {
-            zonesSubmergées = grille.getListNonZonesSubmergées();
-            int upper = zonesSubmergées.size();
+            nonZonesSubmergées = grille.getListNonZonesSubmergées();
+            int upper = nonZonesSubmergées.size();
             if (upper == 0)
                 break;
             System.out.println("Taille : " + upper);
-            Zone zonechoisie = zonesSubmergées.get(r.nextInt(upper));
+            Zone zonechoisie = nonZonesSubmergées.get(r.nextInt(upper));
             if (zonechoisie.getEtat() == Etat.Inondée)
                 zonechoisie.setEtat(Etat.Submergée);
             else if (zonechoisie.getEtat() == Etat.Submergée)
