@@ -4,8 +4,15 @@ package Models;
 import utils.Etat;
 import utils.Observable;
 
-public class Grille {
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Grille extends Observable {
     private Zone[][] grille;
+    private List<Zone> zonesNormales;
+    private List<Zone> zonesSubmergées;
+    private List<Zone> zonesInondées;
     public Grille(){
         grille = new Zone[6][6];
         Etat normal = Etat.Normale;
@@ -21,17 +28,29 @@ public class Grille {
         for (int i = 0; i < 6;i++){
             for (int j = 0; j < 6; j++){
                 if ((j!= 4 || i !=4) && (j!= 1 || i!=4) && (j!= 4 || i !=1) && (j!= 1 || i!=1) && (i == 0 || i == 1 || i == 4 || i == 5) && (j == 0|| j == 1 || j == 4 || j == 5))
-                    grille[i][j] = new Zone(1,0,Etat.Submergée);
+                    grille[i][j] = new Zone(i,j,Etat.Submergée);
                 else
-                    grille[i][j] = new Zone(1,0,normal);
+                    grille[i][j] = new Zone(i,j,normal);
             }
         }
 
     }
 
+    public List<Zone> getListNonZonesSubmergées(){
+        List zonesSubmergées = new ArrayList<Zone>();
+        for (int i = 0; i < grille.length;i++){
+            for (int j = 0; j < grille.length;j++){
+                if (grille[i][j].getEtat() != Etat.Submergée)
+                zonesSubmergées.add(grille[i][j]);
+            }
+        }
+        return zonesSubmergées;
+    }
+
     public Zone getZone(int x,int y){
         return grille[x][y];
     }
+
 
     @Override
     public String toString() {

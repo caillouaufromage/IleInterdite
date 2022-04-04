@@ -10,10 +10,6 @@ public class Zone extends Position {
         this.etat = etat;
     }
 
-    public Zone(Position p , Etat etat){
-        this(p.getX(),p.getY(),etat);
-    }
-
     public Etat getEtat() {
         return etat;
     }
@@ -24,8 +20,8 @@ public class Zone extends Position {
 
     @Override
     public String toString() {
-        return "Model.Zone située en {" +
+        return "Zone située en {" +
                  super.toString() +
-                "}, \t état= " + etat;
+                "}, état= " + etat;
     }
 }

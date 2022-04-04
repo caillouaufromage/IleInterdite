@@ -1,5 +1,6 @@
 package Views;
 
+import Controllers.JeuController;
 import Models.Grille;
 import Models.Zone;
 import utils.Etat;
@@ -37,6 +38,8 @@ public class GrilleView extends JPanel implements Observer {
             g.setColor(Color.GRAY);
         else if(zone.getEtat() == Etat.Submergée)
             g.setColor(Color.BLUE);
+        else if (zone.getEtat() == Etat.Inondée)
+            g.setColor(Color.CYAN);
         /** Coloration d'un rectangle. */
         g.fillRect(x, y,LONGUEUR, HAUTEUR );
 
@@ -45,5 +48,6 @@ public class GrilleView extends JPanel implements Observer {
     @Override
     public void update() {
         repaint();
+        System.out.println("REPAINT!!!");
     }
 }
