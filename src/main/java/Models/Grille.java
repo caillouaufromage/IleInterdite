@@ -9,16 +9,16 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Grille extends Observable {
+public class Grille  {
     private Zone[][] grille;
     private List<Zone> zonesNormales;
     private List<Zone> zonesSubmergées;
     private List<Zone> zonesInondées;
-    private List<Joueur> positionJoueurs;
-    public Grille(){
+    private List<Joueur> joueurs;
+    public Grille(List<Joueur> joueurs){
         grille = new Zone[6][6];
         Etat normal = Etat.Normale;
-        this.positionJoueurs = new ArrayList<>();
+        this.joueurs = joueurs;
         /*grille = new Zone[][]{{new Zone(0,0,normal), new Zone(0,1,normal)},
                               {new Zone(1,0,normal),new Zone(1,1,normal),new Zone(1,2,normal),new Zone(1,3,normal)},
                               {new Zone(2,0,normal),new Zone(2,1,normal),new Zone(2,2,normal),new Zone(2,3,normal),new Zone(2,4,normal), new Zone(2,5,normal)},
@@ -36,7 +36,7 @@ public class Grille extends Observable {
                     grille[i][j] = new Zone(i,j,normal);
             }
         }
-        positionJoueurs.add(new Joueur(3,4));
+
 
     }
 
@@ -56,7 +56,11 @@ public class Grille extends Observable {
     }
 
     public List<Joueur> getPositionJoueurs() {
-        return positionJoueurs;
+        return joueurs;
+    }
+
+    public void setPositionJoueurs(List<Joueur> positionJoueurs) {
+        this.joueurs = positionJoueurs;
     }
 
     @Override
@@ -69,4 +73,9 @@ public class Grille extends Observable {
         }
         return res;
     }
+
+    public boolean isOnBounds(Position p){
+        return p.getX()>= 0 && p.getX()<6 && p.getY()>=0 && p.getY()<6;
+    }
+
 }
