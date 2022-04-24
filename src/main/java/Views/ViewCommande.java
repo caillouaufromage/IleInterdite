@@ -33,19 +33,27 @@ public class ViewCommande extends JPanel{
 
         this.add(buttonDeplace);
 
-        boutonSkip = new JButton("Skip");
+        boutonSkip = new JButton();
         this.add(boutonSkip);
 
 
         buttonDeplace.setIcon(Sprite.icons.get("bouger"));
+        buttonDeplace.setSelectedIcon(Sprite.icons.get("bouger2"));
         buttonDeplace.setBorderPainted(false);
         buttonDeplace.setFocusPainted(false);
         buttonDeplace.setContentAreaFilled(false);
 
         buttonAsseche.setIcon(Sprite.icons.get("assecher"));
+        buttonAsseche.setSelectedIcon(Sprite.icons.get("assecher2"));
         buttonAsseche.setBorderPainted(false);
         buttonAsseche.setFocusPainted(false);
         buttonAsseche.setContentAreaFilled(false);
+
+        boutonSkip.setIcon(Sprite.icons.get("skip"));
+        boutonSkip.setPressedIcon(Sprite.icons.get("skip2"));
+        boutonSkip.setBorderPainted(false);
+        boutonSkip.setFocusPainted(false);
+        boutonSkip.setContentAreaFilled(false);
 
         buttonGroup = new ButtonGroup();
 

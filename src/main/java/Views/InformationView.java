@@ -18,9 +18,7 @@ public class InformationView extends JPanel implements Observer {
 
     JLabel numActionsLabel;
 
-
     JLabel iconJActuel;
-
     String idJoueurActuel;
 
     String numActionsJoueurActuel;
@@ -43,9 +41,10 @@ public class InformationView extends JPanel implements Observer {
         numActionsLabel  = new JLabel(this.numActionsJoueurActuel, SwingConstants.CENTER);
         numActionsLabel.setFont(new Font("Verdana",1,20));
 
+        //this.add(idJoueurLabel);
         this.add(iconJActuel);
         this.add(numActionsLabel);
-      
+
         this.setBorder(new LineBorder(Color.BLACK)); // make it easy to see
 
     }
@@ -53,13 +52,11 @@ public class InformationView extends JPanel implements Observer {
     @Override
     public void update() {
         joueurActuel = ctrl.getJoueurActuel();
-
        // idJoueurActuel = "Joueur actuel : " + joueurActuel.getId();
        // idJoueurLabel.setText(idJoueurActuel
         // );
         ImageIcon icon = new ImageIcon(Sprite.images.get("j"+ joueurActuel.getId()));
         iconJActuel.setIcon(icon);
-
         this.numActionsJoueurActuel = "Nombre d'actions restantes : " + joueurActuel.getNumActions();
         this.numActionsLabel.setText(numActionsJoueurActuel);
 

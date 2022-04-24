@@ -16,7 +16,11 @@ public class Sprite {
 
     public static void init() {
         icons.put("bouger",loadIcon("boutons/bouger.png",300,60));
+        icons.put("bouger2",loadIcon("boutons/bouger2.png",300,60));
         icons.put("assecher",loadIcon("boutons/assecher.png",300,60));
+        icons.put("assecher2",loadIcon("boutons/assecher2.png",300,60));
+        icons.put("skip",loadIcon("boutons/skip.png",300,60));
+        icons.put("skip2",loadIcon("boutons/skip2.png",300,60));
 
         images.put("submergee", loadImage("zones/submergee.png",100,100));
         images.put("inondee", loadImage("zones/inondee.png",100,100));
