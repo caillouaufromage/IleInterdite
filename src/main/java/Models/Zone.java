@@ -25,4 +25,5 @@ public class Zone extends Element {
                  super.toString() +
                 "}, état= " + etat;
     }
+
 }
