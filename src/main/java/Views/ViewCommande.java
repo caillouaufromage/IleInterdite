@@ -6,11 +6,14 @@ import utils.Sprite;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 
 public class ViewCommande extends JPanel{
     JToggleButton buttonAsseche;
@@ -22,14 +25,17 @@ public class ViewCommande extends JPanel{
 
         super(new GridLayout(1, 3));
 
+
         buttonAsseche = new JToggleButton();
         this.add(buttonAsseche);
 
         buttonDeplace = new JToggleButton();
+
         this.add(buttonDeplace);
 
         boutonSkip = new JButton("Skip");
         this.add(boutonSkip);
+
 
         buttonDeplace.setIcon(Sprite.icons.get("bouger"));
         buttonDeplace.setBorderPainted(false);
@@ -78,6 +84,7 @@ public class ViewCommande extends JPanel{
     public boolean buttonAssecheIsSelected() {
         return buttonAsseche.isSelected();
     }
+
 
     public void clearButtonGroup() {
         buttonGroup.clearSelection();
