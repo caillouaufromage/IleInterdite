@@ -2,33 +2,31 @@ package Views;
 
 import Controllers.JeuController;
 import Models.Grille;
-import utils.Observable;
 import utils.Observer;
 
 import javax.swing.*;
-import javax.swing.text.View;
 import java.awt.*;
 
 public class JeuView implements Observer {
+    private final InformationView infoView;
     private JFrame frame;
-    private GrilleView grille;
+    private GrilleView grilleView;
     private ViewCommande commande;
-    private Grille grilleModel;
-    public JeuView(Grille grilleModel){
+    public JeuView(JeuController ctrl, Grille grille, GrilleView grilleView, InformationView infoView, ViewCommande commandeView){
 
-        this.grilleModel = grilleModel;
         frame = new JFrame();
         frame.setTitle("L'Île Interdite");
-        frame.setLayout(new FlowLayout());
-        grille = new GrilleView(grilleModel);
-        frame.add(grille);
+        //frame.setLayout(new BoxLayout(3,1));
+        this.grilleView = grilleView;
+        this.infoView = infoView;
+
+        frame.add(infoView, BorderLayout.PAGE_START);
+        frame.add(grilleView, BorderLayout.CENTER);
 
 
-        JeuController controller = new JeuController(grilleModel);
-        controller.addObserver(this);
-
-        commande = new ViewCommande(grilleModel,controller);
-        frame.add(commande);
+        ctrl.addObserver(this);
+        this.commande = commandeView;
+        frame.add(commande,BorderLayout.PAGE_END);
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,8 +35,7 @@ public class JeuView implements Observer {
 
     @Override
     public void update() {
+        grilleView.update();
 
-        grille.update();
-        System.out.println(grilleModel);
     }
 }
