@@ -6,7 +6,6 @@ import Views.JeuView;
 import utils.*;
 import utils.Observable;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +21,14 @@ public class JeuController extends Observable implements ActionListener , KeyLis
 
     private JeuView jeuView;
 
+
+
     private Random r;
     private  int  numTour = 0;
 
     private Joueur joueurActuel;
     private List<Joueur> joueurs;
+    private List<Artefact> artefacts;
     private final int nombreJoueur = 4;
     public JeuController() {
 
@@ -36,9 +38,12 @@ public class JeuController extends Observable implements ActionListener , KeyLis
         joueurs.add(new Joueur(4,2));
         joueurActuel = joueurs.get(0);
 
+        artefacts = new ArrayList<>();
+        artefacts.add(new Artefact(3,4,0,Element.Coffre));
+
         this.commandeView = new ViewCommande(this);
         this.infoView = new InformationView(this);
-        this.grilleModel = new Grille(joueurs);
+        this.grilleModel = new Grille(joueurs,artefacts);
         this.grilleView = new GrilleView(grilleModel,this);
         this.jeuView = new JeuView(this,grilleModel, grilleView, infoView, commandeView);
         r = new Random();
@@ -70,19 +75,48 @@ public class JeuController extends Observable implements ActionListener , KeyLis
     }
 
     void nextJoueur(){
-        //System.out.println("Joueur numéro :  " + numTour%joueurs.size());
         joueurActuel = joueurs.get(numTour%joueurs.size());
+    }
+
+    Clef generateClef(){
+        return new Clef(0,Element.randomElement());
     }
     void tourSkip(){
         numTour++;
+        if (r.nextInt(2) == 0)
+            joueurActuel.addInventory(generateClef());
+        if(haveLost()) {
+            this.jeuView.delete();
+            EndGame end = new EndGame(false);
+        }
         nextJoueur();
         innondation();
         resetNumActions();
 
-
-        System.out.println("Tour actuel: " + numTour);
     }
 
+
+    boolean joueursOnHeliport(){
+        for (Joueur joueur :joueurs)
+            if(!joueur.isOnZone(grilleModel.getHeliport()))
+                return false;
+        return true;
+    }
+
+    boolean joueursHaveAllArtrefacts(){
+        for (Joueur joueur :joueurs)
+            if(!joueur.hasAllArtefacts())
+                return false;
+        return true;
+    }
+    boolean haveWon(){
+
+        return joueursHaveAllArtrefacts() && joueursOnHeliport();
+    }
+
+    boolean haveLost(){
+        return (grilleModel.getZone(joueurActuel.getX(),joueurActuel.getY()).getEtat() == Etat.Submergée) || (grilleModel.getHeliport().getEtat() == Etat.Submergée) ;
+    }
     void moveJoueur(Direction dir){
         try {
             if (grilleModel.isOnBounds(joueurActuel)) {
@@ -117,6 +151,8 @@ public class JeuController extends Observable implements ActionListener , KeyLis
     private int countCLick = 0;
     boolean moved = false;
     boolean asseched = false;
+
+    boolean recup = false;
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
 
@@ -124,6 +160,7 @@ public class JeuController extends Observable implements ActionListener , KeyLis
             commandeView.clearButtonGroup();
             moved = false;
             asseched = false;
+            recup = false;
             tourSkip();
 
         }
@@ -132,6 +169,7 @@ public class JeuController extends Observable implements ActionListener , KeyLis
                 commandeView.clearButtonGroup();
             moved = commandeView.buttonDeplaceIsSelected();
             asseched = commandeView.buttonAssecheIsSelected();
+            recup = commandeView.buttonRecupIsSelected();
 
         }
         if (actionEvent.getSource() == commandeView.getButtonDeplace()) {
@@ -139,6 +177,15 @@ public class JeuController extends Observable implements ActionListener , KeyLis
                 commandeView.clearButtonGroup();
             moved = commandeView.buttonDeplaceIsSelected();
             asseched = commandeView.buttonAssecheIsSelected();
+            recup = commandeView.buttonRecupIsSelected();
+        }
+
+        if (actionEvent.getSource() == commandeView.getButtonRecup()) {
+            if (recup)
+                commandeView.clearButtonGroup();
+            moved = commandeView.buttonDeplaceIsSelected();
+            asseched = commandeView.buttonAssecheIsSelected();
+            recup = commandeView.buttonRecupIsSelected();
         }
         grilleView.addNotify();
         notifyObservers();
@@ -186,14 +233,26 @@ public class JeuController extends Observable implements ActionListener , KeyLis
             case KeyEvent.VK_X:
                 if (asseched )
                     joueurActuel.asseche(joueurActuel.getZoneOn(this.grilleModel));
+                if(recup) {
+                    for (int i = 0; i < artefacts.size(); i++) {
+                        Artefact arte = artefacts.get(i);
+                        if (arte.getX() == joueurActuel.getX() && arte.getY() == joueurActuel.getY() && joueurActuel.hasKeyElement(arte.getElement())) {
+                            joueurActuel.recupererArtefact(arte);
+                            this.artefacts.remove(arte);
+                            this.joueurActuel.removeInventory(joueurActuel.getKeyElement(arte.getElement()));
+                        }
+                    }
+                }
                 break;
-
-
         }
         notifyObservers();
     }
 
     public Joueur getJoueurActuel() {
         return joueurActuel;
+    }
+
+    public List<Joueur> getJoueurs() {
+        return joueurs;
     }
 }

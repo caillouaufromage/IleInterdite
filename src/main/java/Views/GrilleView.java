@@ -1,9 +1,7 @@
 package Views;
 
 import Controllers.JeuController;
-import Models.Grille;
-import Models.Joueur;
-import Models.Zone;
+import Models.*;
 import utils.Etat;
 import utils.Observer;
 import utils.Position;
@@ -20,12 +18,16 @@ public class GrilleView extends JPanel implements Observer {
     private Grille grille;
     private List<Joueur> joueurs;
 
+    private List<Artefact> artefacts;
+
+
     private Map.Entry<Integer,Integer> coordinates;
 
     JeuController ctrl;
     public GrilleView(Grille grille, JeuController ctrl){
         this.grille = grille;
        this.joueurs = grille.getPositionJoueurs();
+       this.artefacts = grille.getPositionArtefacts();
        this.ctrl = ctrl;
         //System.out.println("test");
         //setBackground(Color.BLUE);
@@ -44,27 +46,20 @@ public class GrilleView extends JPanel implements Observer {
         super.paintComponent(g);
         setBackground(g);
         g.translate(getWidth() / 4, getHeight()/ 4);
-        int c = 0;
-        int b = 0;
         for (int i = 0; i < 6;i++) {
             for (int j = 0; j < 6; j++) {
                 paint(g, grille.getZone(i, j), i * (LONGUEUR), j * (LONGUEUR));
             }
         }
         for (Joueur j : joueurs)
-            paint(g,j,j.getX()*(LONGUEUR),j.getY()*(LONGUEUR));
+            paint(g,j,j.getX()*(LONGUEUR)+LONGUEUR/3,j.getY()*(LONGUEUR)+LONGUEUR/3);
+        for (Artefact a : artefacts)
+            paint(g,a,a.getX()*(LONGUEUR),a.getY()*(LONGUEUR));
     }
 
     private void paint(Graphics g, Zone zone , int x, int y) {
-        /** Sélection d'une couleur. **/
-        Image img = Sprite.images.get("normale");
-        //System.out.println("test");
-        if(zone.getEtat() == Etat.Normale)
-            img = Sprite.images.get("normale");
-        else if(zone.getEtat() == Etat.Submergée)
-            img = Sprite.images.get("submergee");
-        else if (zone.getEtat() == Etat.Inondée)
-            img = Sprite.images.get("inondee");
+        /** Sélection d'une ima. **/
+        Image img = zone.getImgZone();
         /** Affichage d'une zone. **/
         g.drawImage(img, x, y, null);
     }
@@ -82,6 +77,11 @@ public class GrilleView extends JPanel implements Observer {
     private void paint(Graphics g, Joueur joueur, int x, int y){
         String name = "j"+joueur.getId();
         Image img = Sprite.images.get(name);
+        g.drawImage(img,x,y,null);
+    }
+
+    private void paint(Graphics g, Artefact artefact, int x, int y){
+        Image img = artefact.getImage();
         g.drawImage(img,x,y,null);
     }
 
