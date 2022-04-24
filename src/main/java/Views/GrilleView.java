@@ -7,57 +7,89 @@ import Models.Zone;
 import utils.Etat;
 import utils.Observer;
 import utils.Position;
+import utils.Sprite;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 
 public class GrilleView extends JPanel implements Observer {
-    int HAUTEUR = 60;
-    int LONGUEUR = 40;
+    private final int HAUTEUR = 60;
+    private final int LONGUEUR = 100;
     private Grille grille;
-    private List<Joueur> positionJoueurs;
-    public GrilleView(Grille grille){
+    private List<Joueur> joueurs;
+
+    private Map.Entry<Integer,Integer> coordinates;
+
+    JeuController ctrl;
+    public GrilleView(Grille grille, JeuController ctrl){
         this.grille = grille;
-        this.positionJoueurs = grille.getPositionJoueurs();
+       this.joueurs = grille.getPositionJoueurs();
+       this.ctrl = ctrl;
         //System.out.println("test");
         //setBackground(Color.BLUE);
-        this.setPreferredSize(new Dimension((LONGUEUR + LONGUEUR /2 ) * 10,(HAUTEUR + HAUTEUR /2 ) * 10));
-        setBackground(Color.BLUE);
+        this.setPreferredSize(new Dimension((LONGUEUR ) * 10,LONGUEUR * 10));
+        //setBackground(Color.BLUE);
+        this.addKeyListener(ctrl);
     }
 
+    public void addNotify() {
+        super.addNotify();
+        requestFocus();
+    }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        for (int i = 0; i < 6;i++)
-            for (int j = 0; j < 6; j++)
-                paint(g, grille.getZone(i,j) , i*(LONGUEUR+LONGUEUR/2), j*(HAUTEUR + LONGUEUR/2));
-        for (Joueur p : positionJoueurs)
-            paint(g,p,p.getX()*(LONGUEUR+LONGUEUR/2),p.getY()*(HAUTEUR + LONGUEUR/2));
+        setBackground(g);
+        g.translate(getWidth() / 4, getHeight()/ 4);
+        int c = 0;
+        int b = 0;
+        for (int i = 0; i < 6;i++) {
+            for (int j = 0; j < 6; j++) {
+                paint(g, grille.getZone(i, j), i * (LONGUEUR), j * (LONGUEUR));
+            }
+        }
+        for (Joueur j : joueurs)
+            paint(g,j,j.getX()*(LONGUEUR),j.getY()*(LONGUEUR));
     }
 
     private void paint(Graphics g, Zone zone , int x, int y) {
         /** Sélection d'une couleur. **/
+        Image img = Sprite.images.get("normale");
         //System.out.println("test");
         if(zone.getEtat() == Etat.Normale)
-            g.setColor(Color.GRAY);
+            img = Sprite.images.get("normale");
         else if(zone.getEtat() == Etat.Submergée)
-            g.setColor(Color.BLUE);
+            img = Sprite.images.get("submergee");
         else if (zone.getEtat() == Etat.Inondée)
-            g.setColor(Color.CYAN);
-        /** Coloration d'un rectangle. **/
-        g.fillRect(x, y,LONGUEUR, HAUTEUR );
+            img = Sprite.images.get("inondee");
+        /** Affichage d'une zone. **/
+        g.drawImage(img, x, y, null);
     }
 
+    private void setBackground(Graphics g){
+        Image img = Sprite.images.get("submergee");
+        Graphics2D g2d = (Graphics2D) g.create();
+        for (int y = 0; y < getHeight(); y += img.getHeight(null)) {
+            for (int x = 0; x < getWidth(); x += img.getWidth(null)) {
+                g2d.drawImage(img, x, y, this);
+            }
+        }
+        //for (int i = 0; i < )
+    }
     private void paint(Graphics g, Joueur joueur, int x, int y){
-        g.setColor(Color.RED);
-        g.fillOval(x,y,30,30);
+        String name = "j"+joueur.getId();
+        Image img = Sprite.images.get(name);
+        g.drawImage(img,x,y,null);
     }
 
     @Override
     public void update() {
         repaint();
-        System.out.println("REPAINT!!!");
+        //System.out.println("REPAINT!!!");
     }
+
+
 }
