@@ -12,6 +12,8 @@ public class JeuView implements Observer {
     private JFrame frame;
     private GrilleView grilleView;
     private ViewCommande commande;
+    InventoryView inventoryView;
+    ExchangeView exchangeView;
     public JeuView(JeuController ctrl, Grille grille, GrilleView grilleView, InformationView infoView, ViewCommande commandeView){
 
         frame = new JFrame();
@@ -20,6 +22,10 @@ public class JeuView implements Observer {
         this.grilleView = grilleView;
         this.infoView = infoView;
 
+         inventoryView = new InventoryView(ctrl);
+         exchangeView = new ExchangeView(ctrl);
+        frame.add(inventoryView, BorderLayout.EAST);
+        frame.add(exchangeView, BorderLayout.WEST);
         frame.add(infoView, BorderLayout.PAGE_START);
         frame.add(grilleView, BorderLayout.CENTER);
 
@@ -36,6 +42,9 @@ public class JeuView implements Observer {
     @Override
     public void update() {
         grilleView.update();
+    }
 
+    public void delete(){
+        frame.dispose();
     }
 }

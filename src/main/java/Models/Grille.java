@@ -8,6 +8,7 @@ import utils.Position;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Grille  {
     private Zone[][] grille;
@@ -15,10 +16,15 @@ public class Grille  {
     private List<Zone> zonesSubmergées;
     private List<Zone> zonesInondées;
     private List<Joueur> joueurs;
-    public Grille(List<Joueur> joueurs){
+    private List<Zone> positionsZones;
+    Heliport heliport;
+
+    private List<Artefact> artefacts;
+    public Grille(List<Joueur> joueurs,List<Artefact> artefacts) {
         grille = new Zone[6][6];
         Etat normal = Etat.Normale;
         this.joueurs = joueurs;
+        this.artefacts=artefacts;
         /*grille = new Zone[][]{{new Zone(0,0,normal), new Zone(0,1,normal)},
                               {new Zone(1,0,normal),new Zone(1,1,normal),new Zone(1,2,normal),new Zone(1,3,normal)},
                               {new Zone(2,0,normal),new Zone(2,1,normal),new Zone(2,2,normal),new Zone(2,3,normal),new Zone(2,4,normal), new Zone(2,5,normal)},
@@ -28,15 +34,36 @@ public class Grille  {
 
 };
          */
-        for (int i = 0; i < 6;i++){
-            for (int j = 0; j < 6; j++){
-                if ((j!= 4 || i !=4) && (j!= 1 || i!=4) && (j!= 4 || i !=1) && (j!= 1 || i!=1) && (i == 0 || i == 1 || i == 4 || i == 5) && (j == 0|| j == 1 || j == 4 || j == 5))
+
+        Random rand = new Random();
+        int i = rand.nextInt(6);
+        int j = rand.nextInt(6);
+        boolean submerged = (j!= 4 || i !=4) && (j!= 1 || i!=4) && (j!= 4 || i !=1) &&
+                (j!= 1 || i!=1) && (i == 0 || i == 1 || i == 4 || i == 5) &&
+                (j == 0|| j == 1 || j == 4 || j == 5);
+        while (submerged){
+            i = rand.nextInt(6);
+            j = rand.nextInt(6);
+            submerged = (j!= 4 || i !=4) && (j!= 1 || i!=4) && (j!= 4 || i !=1) &&
+                    (j!= 1 || i!=1) && (i == 0 || i == 1 || i == 4 || i == 5) &&
+                    (j == 0|| j == 1 || j == 4 || j == 5);
+        }
+        System.out.println(i + "  " + j);
+        heliport = new Heliport(i,j,Etat.Normale);
+        for ( i = 0; i < 6;i++){
+            for (j = 0; j < 6; j++){
+                submerged = (j!= 4 || i !=4) && (j!= 1 || i!=4) && (j!= 4 || i !=1) &&
+                        (j!= 1 || i!=1) && (i == 0 || i == 1 || i == 4 || i == 5) &&
+                        (j == 0|| j == 1 || j == 4 || j == 5);
+                if (submerged)
                     grille[i][j] = new Zone(i,j,Etat.Submergée);
-                else
-                    grille[i][j] = new Zone(i,j,normal);
+                else if ( i == heliport.getX() && j == heliport.getY())
+                    grille[i][j] = heliport;
+                else {
+                    grille[i][j] = new Zone(i, j, normal);
+                }
             }
         }
-
 
     }
 
@@ -59,8 +86,16 @@ public class Grille  {
         return joueurs;
     }
 
+    public List<Artefact> getPositionArtefacts() {
+        return artefacts;
+    }
+
     public void setPositionJoueurs(List<Joueur> positionJoueurs) {
         this.joueurs = positionJoueurs;
+    }
+
+    public Heliport getHeliport() {
+        return heliport;
     }
 
     @Override
@@ -82,4 +117,7 @@ public class Grille  {
     }
 
 
+    public Zone[][] getGrille() {
+        return grille;
+    }
 }

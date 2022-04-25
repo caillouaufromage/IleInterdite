@@ -1,23 +1,19 @@
 package Views;
 
 import Controllers.JeuController;
-import utils.ImageLoader;
 import utils.Sprite;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 
 public class ViewCommande extends JPanel{
     JToggleButton buttonAsseche;
     JToggleButton buttonDeplace;
+
+    JToggleButton buttonRecup;
 
     private ButtonGroup buttonGroup;
     JButton boutonSkip;
@@ -31,10 +27,15 @@ public class ViewCommande extends JPanel{
 
         buttonDeplace = new JToggleButton();
 
+        buttonRecup = new JToggleButton();
+        this.add(buttonRecup);
+
         this.add(buttonDeplace);
 
         boutonSkip = new JButton();
         this.add(boutonSkip);
+
+
 
 
         buttonDeplace.setIcon(Sprite.icons.get("bouger"));
@@ -55,8 +56,17 @@ public class ViewCommande extends JPanel{
         boutonSkip.setFocusPainted(false);
         boutonSkip.setContentAreaFilled(false);
 
+
+        buttonRecup.setIcon(Sprite.getIcon("recupArtefact"));
+        buttonRecup.setSelectedIcon(Sprite.getIcon("recupArtefact2"));
+        buttonRecup.setBorderPainted(false);
+        buttonRecup.setFocusPainted(false);
+        buttonRecup.setContentAreaFilled(false);
+
+
         buttonGroup = new ButtonGroup();
 
+        buttonGroup.add(buttonRecup);
         buttonGroup.add(boutonSkip);
         buttonGroup.add(buttonDeplace);
         buttonGroup.add(buttonAsseche);
@@ -64,7 +74,7 @@ public class ViewCommande extends JPanel{
         boutonSkip.addActionListener(controller);
         buttonDeplace.addActionListener(controller);
         buttonAsseche.addActionListener(controller);
-
+        buttonRecup.addActionListener(controller);
 
 
     }
@@ -81,6 +91,10 @@ public class ViewCommande extends JPanel{
         return buttonDeplace;
     }
 
+    public JToggleButton getButtonRecup() {
+        return buttonRecup;
+    }
+
     public boolean buttonSkipIsSelected() {
         return boutonSkip.isSelected();
     }
@@ -91,6 +105,9 @@ public class ViewCommande extends JPanel{
 
     public boolean buttonAssecheIsSelected() {
         return buttonAsseche.isSelected();
+    }
+    public boolean buttonRecupIsSelected() {
+        return buttonRecup.isSelected();
     }
 
 
